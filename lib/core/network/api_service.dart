@@ -28,6 +28,7 @@ class ApiService {
 
   Future<http.Response> getPatientList() async {
     final uri = Uri.parse('${baseUrl}PatientList');
+    print(uri.toString());
     final token = await _getToken();
     return await http.get(uri, headers: {
       if (token != null) 'Authorization': 'Bearer $token',

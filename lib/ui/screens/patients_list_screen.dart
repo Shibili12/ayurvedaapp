@@ -21,8 +21,9 @@ class _PatientsListScreenState extends State<PatientsListScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() =>
-        Provider.of<PatientProvider>(context, listen: false).fetchPatients());
+    Future.microtask(() {
+      Provider.of<PatientProvider>(context, listen: false).fetchPatients();
+    });
   }
 
   Future<void> _onRefresh() async {
@@ -159,18 +160,40 @@ class _PatientsListScreenState extends State<PatientsListScreen> {
             child: RefreshIndicator(
               onRefresh: _onRefresh,
               child: patientProvider.loading
-                  ? const Center(child: CircularProgressIndicator())
+                  ? SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.8,
+                        child: const Center(child: Text("")),
+                      ),
+                    )
                   : patientProvider.patients.isEmpty
-                      ? const EmptyListWidget(
-                          message: "No patients found",
+                      ? SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.8,
+                            child: const EmptyListWidget(
+                                message: "No patients found"),
+                          ),
                         )
                       : ListView.builder(
                           padding: const EdgeInsets.all(8),
+                          // reverse: true,
                           itemCount: patientProvider.patients.length,
                           itemBuilder: (context, index) {
                             final Patient patient =
                                 patientProvider.patients[index];
-                            return PatientTile(patient: patient);
+                            return Visibility(
+                              visible: patient.name != "",
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                child: PatientTile(
+                                  patient: patient,
+                                  index: index + 1,
+                                ),
+                              ),
+                            );
                           },
                         ),
             ),

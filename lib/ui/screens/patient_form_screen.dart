@@ -66,11 +66,10 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
 
     final patientProvider =
         Provider.of<PatientProvider>(context, listen: false);
-      final treatmentProvider =
-        Provider.of<TreatmentProvider>(context, listen: false); 
+    final treatmentProvider =
+        Provider.of<TreatmentProvider>(context, listen: false);
 
     final branchId = _selectedBranch ?? "";
-
 
     final body = {
       "name": _nameController.text,
@@ -84,11 +83,10 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
       "balance_amount": _balanceController.text,
       "date_nd_time": DateTime.now().toString(),
       "id": "",
-       "male": treatmentProvider.maleIds,
-  "female": treatmentProvider.femaleIds,
-  "treatments": treatmentProvider.toApiPayload()["treatments"],
+      "male": treatmentProvider.maleIds,
+      "female": treatmentProvider.femaleIds,
+      "treatments": treatmentProvider.toApiPayload()["treatments"],
       "branch": branchId,
-  
     };
 
     final success = await patientProvider.submitPatient(body);
@@ -522,7 +520,7 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 25, 16, 8),
                 child: Mybutton(
-                    title: "Register",
+                    title: patientProvider.loading ? "......" : "Register",
                     onTap: patientProvider.loading ? null : _submitForm),
               ),
             ],
@@ -565,10 +563,14 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
                             color: Color.fromRGBO(64, 64, 64, 1))),
                   ),
                   DropdownButtonFormField<String>(
+                    isExpanded: true,
+                    alignment: Alignment.centerLeft,
+                    style: TextStyle(fontSize: 12, color: Colors.black),
                     icon: Icon(
                       Icons.keyboard_arrow_down,
                       color: Color.fromRGBO(0, 104, 55, 1),
                     ),
+                    iconSize: 15,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Color.fromRGBO(217, 217, 217, .25),
@@ -588,7 +590,7 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
                           borderRadius: BorderRadius.circular(9),
                           borderSide:
                               BorderSide(color: Color.fromRGBO(0, 0, 0, .1))),
-                      hintText: "Choose Prefered Treatment",
+                      hintText: "Choose Treatment",
                       hintStyle: GoogleFonts.inter(
                           fontSize: 14, fontWeight: FontWeight.w300),
                     ),
