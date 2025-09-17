@@ -1,5 +1,8 @@
 import 'package:ayurvedaapp/core/network/api_service.dart';
 import 'package:ayurvedaapp/providers/auth_provider.dart';
+import 'package:ayurvedaapp/providers/branch_provider.dart';
+import 'package:ayurvedaapp/providers/patient_provider.dart';
+import 'package:ayurvedaapp/providers/treatment_provider.dart';
 import 'package:ayurvedaapp/ui/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +21,15 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => AuthProvider(api: ApiService()),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => PatientProvider(api: ApiService()),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => BranchProvider(api: ApiService()),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => TreatmentProvider(api: ApiService()),
         ),
       ],
       child: MaterialApp(
